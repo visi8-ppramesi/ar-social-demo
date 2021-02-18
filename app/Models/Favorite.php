@@ -9,6 +9,8 @@ class Favorite extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function thread(){
         return $this->belongsTo(Thread::class);
     }

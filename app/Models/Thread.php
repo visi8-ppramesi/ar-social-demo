@@ -9,6 +9,12 @@ class Thread extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
+    public function getThreads(){
+
+    }
+
     public function user(){
         return $this->belongsTo(User::class);
     }
@@ -23,5 +29,9 @@ class Thread extends Model
 
     public function favorited(){
         return $this->hasMany(Favorite::class);
+    }
+
+    public function group(){
+        return $this->belongsTo(Group::class);
     }
 }

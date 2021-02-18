@@ -17,11 +17,11 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->text('message');
             $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('thread_id');
-            $table->foreign('thread_id')->references('id')->on('threads')->onDelete('cascade');
-            $table->text('image');
-            $table->integer('likes');
+            // $table->foreign('thread_id')->references('id')->on('threads')->onDelete('cascade');
+            $table->text('image')->nullable();
+            $table->integer('likes')->default(0);
             $table->timestamps();
         });
     }
