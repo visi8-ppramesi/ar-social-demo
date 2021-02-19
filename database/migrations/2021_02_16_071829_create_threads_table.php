@@ -22,6 +22,8 @@ class CreateThreadsTable extends Migration
             // $table->foreign('group_id')->references('id')->on('groups');
             $table->text('image')->nullable();
             $table->integer('likes')->default(0);
+            $table->boolean('pinned')->default(false);
+
             $table->timestamps();
         });
     }

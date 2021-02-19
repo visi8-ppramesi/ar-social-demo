@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <jet-banner />
+    <v-app>
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
@@ -15,16 +14,15 @@
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <!-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </jet-nav-link>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
-                            <div class="ml-3 relative">
-                                <!-- Teams Dropdown -->
+                            <!-- <div class="ml-3 relative">
                                 <jet-dropdown align="right" width="60" v-if="$page.props.jetstream.hasTeamFeatures">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -40,24 +38,17 @@
 
                                     <template #content>
                                         <div class="w-60">
-                                            <!-- Team Management -->
                                             <template v-if="$page.props.jetstream.hasTeamFeatures">
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                                     Manage Team
                                                 </div>
-
-                                                <!-- Team Settings -->
                                                 <jet-dropdown-link :href="route('teams.show', $page.props.user.current_team)">
                                                     Team Settings
                                                 </jet-dropdown-link>
-
                                                 <jet-dropdown-link :href="route('teams.create')" v-if="$page.props.jetstream.canCreateTeams">
                                                     Create New Team
                                                 </jet-dropdown-link>
-
                                                 <div class="border-t border-gray-100"></div>
-
-                                                <!-- Team Switcher -->
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                                     Switch Teams
                                                 </div>
@@ -76,10 +67,10 @@
                                         </div>
                                     </template>
                                 </jet-dropdown>
-                            </div>
+                            </div> -->
 
                             <!-- Settings Dropdown -->
-                            <div class="ml-3 relative">
+                            <div v-if="$page.props.user" class="ml-3 relative">
                                 <jet-dropdown align="right" width="48">
                                     <template #trigger>
                                         <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
@@ -122,6 +113,14 @@
                                     </template>
                                 </jet-dropdown>
                             </div>
+                            <div v-else class="ml-3 relative">
+                                <inertia-link :href="route('login')" class="text-sm text-gray-700 underline">
+                                    Login
+                                </inertia-link>
+                                <inertia-link :href="route('register')" class="ml-4 text-sm text-gray-700 underline">
+                                    Register
+                                </inertia-link>
+                            </div>
                         </div>
 
                         <!-- Hamburger -->
@@ -137,14 +136,13 @@
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
+                <!-- <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </jet-responsive-nav-link>
                     </div>
 
-                    <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="flex-shrink-0 mr-3" >
@@ -166,14 +164,12 @@
                                 API Tokens
                             </jet-responsive-nav-link>
 
-                            <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
                                 <jet-responsive-nav-link as="button">
                                     Logout
                                 </jet-responsive-nav-link>
                             </form>
 
-                            <!-- Team Management -->
                             <template v-if="$page.props.jetstream.hasTeamFeatures">
                                 <div class="border-t border-gray-200"></div>
 
@@ -181,7 +177,6 @@
                                     Manage Team
                                 </div>
 
-                                <!-- Team Settings -->
                                 <jet-responsive-nav-link :href="route('teams.show', $page.props.user.current_team)" :active="route().current('teams.show')">
                                     Team Settings
                                 </jet-responsive-nav-link>
@@ -192,7 +187,6 @@
 
                                 <div class="border-t border-gray-200"></div>
 
-                                <!-- Team Switcher -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     Switch Teams
                                 </div>
@@ -210,7 +204,7 @@
                             </template>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </nav>
 
             <!-- Page Heading -->
@@ -229,7 +223,7 @@
             <portal-target name="modal" multiple>
             </portal-target>
         </div>
-    </div>
+    </v-app>
 </template>
 
 <script>

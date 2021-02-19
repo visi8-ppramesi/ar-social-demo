@@ -4,19 +4,28 @@
             <inertia-link v-if="$page.props.user" href="/dashboard" class="text-sm text-gray-700 underline">
                 Dashboard
             </inertia-link>
-
             <template v-else>
                 <inertia-link :href="route('login')" class="text-sm text-gray-700 underline">
                     Login
                 </inertia-link>
-
                 <inertia-link v-if="canRegister" :href="route('register')" class="ml-4 text-sm text-gray-700 underline">
                     Register
                 </inertia-link>
             </template>
         </div>
 
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+        <div class="container flex flex-row">
+            <div class="flex-auto">
+                dasdfasdfasdfasdf
+            </div>
+            <div class="flex-auto">
+                dasdfasdfasdfasdf
+            </div>
+            <div class="flex-auto">
+                dasdfasdfasdfasdf
+            </div>
+        </div>
+        <!-- <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
                 <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">
                     <g clip-path="url(#clip0)" fill="#EF3B2D">
@@ -102,7 +111,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

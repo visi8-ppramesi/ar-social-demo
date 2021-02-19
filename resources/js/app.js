@@ -1,6 +1,7 @@
 require('./bootstrap');
 
 // Import modules...
+import '@mdi/font/css/materialdesignicons.css'
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue';
@@ -15,6 +16,7 @@ Vue.use(Vuetify)
 const app = document.getElementById('app');
 
 new Vue({
+    vuetify: new Vuetify(),
     render: (h) =>
         h(InertiaApp, {
             props: {
@@ -22,4 +24,7 @@ new Vue({
                 resolveComponent: (name) => require(`./Pages/${name}`).default,
             },
         }),
+    icons: {
+        iconFont: 'md'
+    }
 }).$mount(app);
