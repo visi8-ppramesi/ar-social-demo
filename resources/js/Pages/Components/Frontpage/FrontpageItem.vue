@@ -1,7 +1,7 @@
 <template>
     <v-card>
-        <!-- <v-img v-if="thread.image" :src="thread.image"></v-img> -->
-        <v-img src="https://image.shutterstock.com/image-vector/example-red-square-grunge-stamp-260nw-327662909.jpg"></v-img>
+        <v-img v-if="thread.image" :src="thread.image"></v-img>
+        <!-- <v-img src="https://image.shutterstock.com/image-vector/example-red-square-grunge-stamp-260nw-327662909.jpg"></v-img> -->
         <!-- <v-card-subtitle>
             <v-avatar>
                 <img

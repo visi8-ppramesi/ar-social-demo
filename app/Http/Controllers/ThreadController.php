@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Favorite;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use App\Models\Tag;
 
@@ -28,7 +30,7 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -39,7 +41,18 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $img = $request->file('image');
+        $createObj = [
+            'message' => $request['post'],
+            'user_id' => auth()->user()->id,
+            'group_id' => 1
+        ];
+        if($img){
+            $imgPath = $img->store('public/images');
+            $createObj['image'] = Storage::url($imgPath);
+        }
+        Thread::create($createObj);
+        return redirect()->back();
     }
 
     /**
@@ -88,12 +101,28 @@ class ThreadController extends Controller
     }
 
     public function like(Thread $thread){
-        $thread->increment('likes');
-        return Inertia::render('Dashboard', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'threads' => Thread::with(['user', 'comments'])->orderBy('created_at', 'desc')->get(),
-            'tags' => Tag::all()
+        $uid = auth()->user()->id;
+        $tid = $thread->id;
+        $fav = Favorite::where([
+            ['user_id', '=', $uid],
+            ['thread_id', '=', $tid]
         ]);
+        if($fav->exists()){
+            $fav->delete();
+            $thread->decrement('likes');
+        }else{
+            Favorite::create([
+                'user_id' => $uid,
+                'thread_id' => $tid
+            ]);
+            $thread->increment('likes');
+        }
+        return redirect()->back();
+        // return Inertia::render('Dashboard', [
+        //     'canLogin' => Route::has('login'),
+        //     'canRegister' => Route::has('register'),
+        //     'threads' => Thread::with(['user', 'comments'])->orderBy('created_at', 'desc')->get(),
+        //     'tags' => Tag::all()
+        // ]);
     }
 }

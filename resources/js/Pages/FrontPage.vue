@@ -18,6 +18,7 @@
                             <v-row class="mb-3" v-if="$page.props.user">
                                 <v-col>
                                     <v-card class="px-2 pb-2">
+                                        <v-img :src="previewUrl"></v-img>
                                         <v-form
                                             v-model="form"
                                         >
@@ -25,17 +26,19 @@
                                                 auto-grow
                                                 rows="2"
                                                 label="What's happening?"
+                                                v-model="post"
                                             ></v-textarea>
+                                            <v-file-input type="file" ref="file" style="display: none" v-model="image" @change="previewImage"/>
                                         </v-form>
                                         <v-spacer></v-spacer>
                                         <div class="new-post-actions">
                                             <div>
-                                                <v-icon>
+                                                <v-icon @click="$refs.file.$refs.input.click()">
                                                     mdi-file-image
                                                 </v-icon>
                                             </div>
                                             <div>
-                                                <v-btn click="submit">Submit</v-btn>
+                                                <v-btn @click="submit">Submit</v-btn>
                                             </div>
                                         </div>
                                     </v-card>
@@ -72,7 +75,10 @@ export default {
     data: () => ({
         drawer: false,
         group: null,
-        form: null
+        form: null,
+        image:null,
+        previewUrl:'',
+        post:'',
     }),
     props: [
         'tags',
@@ -83,6 +89,18 @@ export default {
         this.drawer = false
       },
     },
+    methods: {
+        previewImage(){
+            this.previewUrl = URL.createObjectURL(this.image)
+        },
+        submit(){
+            console.log('asdfasdfasdfasdf')
+            var data = new FormData()
+            data.append('post', this.post)
+            data.append('image', this.image)
+            this.$inertia.post('/thread/submit', data)
+        }
+    }
 }
 </script>
 

@@ -32,6 +32,8 @@ Route::get('/dashboard', function(){
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
+Route::middleware(['auth:sanctum'])->post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');
+
 Route::middleware(['auth:sanctum'])->get('/like/{thread}', [ThreadController::class, 'like'])->name('like');
 
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
