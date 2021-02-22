@@ -4,14 +4,14 @@
             <v-img v-if="thread.image" :src="thread.image"></v-img>
             <v-container>
                 <v-row>
-                    <v-col cols="1">
+                    <v-col cols="3" md="1">
                         <v-avatar>
                             <img
                                 :src="thread.user.profile_photo_url"
                             />
                         </v-avatar>
                     </v-col>
-                    <v-col cols="11">
+                    <v-col cols="9" md="11">
                         <div class="flex flex-col">
                             <div class="mt-1">
                                 <span class="font-semibold">{{thread.user.name}}</span> · {{toDate(thread.created_at)}}
@@ -68,16 +68,16 @@
                     </div>
                 </v-form>
             </v-card>
-            <v-container v-for="(comment, idx) in thread.comments" v-bind:key="idx">
+            <v-container v-for="(comment, idx) in thread.comments" v-bind:key="idx" class="pb-0">
                 <v-row>
-                    <v-col cols="1">
+                    <v-col cols="3" md="1">
                         <v-avatar>
                             <img
                                 :src="comment.user.profile_photo_url"
                             />
                         </v-avatar>
                     </v-col>
-                    <v-col cols="11">
+                    <v-col cols="9" md="11" class="pr-0">
                         <v-card class="px-2 pb-2">
                             <div class="flex flex-col">
                                 <div class="mt-1">

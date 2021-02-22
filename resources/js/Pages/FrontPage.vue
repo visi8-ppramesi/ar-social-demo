@@ -14,6 +14,24 @@
                 </template>
                 <template v-slot:column-two>
                     <v-container fluid>
+                        <v-row class="mb-0">
+                            <v-col class="pb-0">
+                                <v-tabs v-model="tabSelector">
+                                    <v-tab @click="showLatest" key="1">
+                                        Latest
+                                    </v-tab>
+                                    <v-tab @click="showWeek" key="2">
+                                        Week
+                                    </v-tab>
+                                    <v-tab @click="showMonth" key="3">
+                                        Month
+                                    </v-tab>
+                                    <v-tab @click="showYear" key="4">
+                                        Year
+                                    </v-tab>
+                                </v-tabs>
+                            </v-col>
+                        </v-row>
                         <v-row class="mb-3" v-if="$page.props.user">
                             <v-col>
                                 <v-card class="px-2 pb-2">
@@ -34,6 +52,9 @@
                                         <div>
                                             <v-icon @click="$refs.file.$refs.input.click()">
                                                 mdi-file-image
+                                            </v-icon>
+                                            <v-icon @click="augmentedReality">
+                                                mdi-augmented-reality
                                             </v-icon>
                                         </div>
                                         <div>
@@ -67,6 +88,22 @@ import FrontpageNavbar from './Components/Frontpage/FrontpageNavbar'
 
 export default {
     name: 'front-page',
+    created(){
+        switch(this.tab){
+            case 'latest':
+                this.tabSelector = 0
+                break
+            case 'week':
+                this.tabSelector = 1
+                break
+            case 'month':
+                this.tabSelector = 2
+                break
+            case 'year':
+                this.tabSelector = 3
+                break
+        }
+    },
     components:{
         FrontpageNavbar,
         PostItem,
@@ -79,10 +116,12 @@ export default {
         image:null,
         previewUrl:'',
         post:'',
+        tabSelector: 0,
     }),
     props: [
         'tags',
         'threads',
+        'tab'
     ],
     watch: {
       group () {
@@ -90,6 +129,53 @@ export default {
       },
     },
     methods: {
+        augmentedReality(){
+            console.log('asdfasdfasdf')
+        },
+        showLatest(){
+            this.$inertia.get(
+                '/',
+                {
+                    tab: 'latest'
+                },
+                {
+                    preserveState: false
+                }
+            )
+        },
+        showWeek(){
+            this.$inertia.get(
+                '/',
+                {
+                    tab: 'week'
+                },
+                {
+                    preserveState: false
+                }
+            )
+        },
+        showMonth(){
+            this.$inertia.get(
+                '/',
+                {
+                    tab: 'month'
+                },
+                {
+                    preserveState: false
+                }
+            )
+        },
+        showYear(){
+            this.$inertia.get(
+                '/',
+                {
+                    tab: 'year'
+                },
+                {
+                    preserveState: false
+                }
+            )
+        },
         previewImage(){
             this.previewUrl = URL.createObjectURL(this.image)
         },
