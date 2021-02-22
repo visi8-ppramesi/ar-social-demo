@@ -18,4 +18,8 @@ class Comment extends Model
     public function thread(){
         return $this->belongsTo(Thread::class);
     }
+
+    public function liked(){
+        return $this->hasMany(CommentLike::class);
+    }
 }

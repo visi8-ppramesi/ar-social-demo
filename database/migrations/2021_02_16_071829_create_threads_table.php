@@ -18,11 +18,12 @@ class CreateThreadsTable extends Migration
             $table->text('message');
             $table->foreignId('user_id');
             // $table->foreign('user_id')->references('id')->on('users');
-            $table->foreignId('group_id');
+            $table->foreignId('group_id')->default(1);
             // $table->foreign('group_id')->references('id')->on('groups');
             $table->text('image')->nullable();
             $table->integer('likes')->default(0);
-            $table->boolean('pinned')->default(false);
+            $table->boolean('pinned')->default(0);
+            $table->boolean('sidebar')->default(0);
 
             $table->timestamps();
         });

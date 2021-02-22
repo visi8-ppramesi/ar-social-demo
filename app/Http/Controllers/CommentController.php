@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\CommentLike;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -35,7 +36,12 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Comment::create([
+            'message' => $request['message'],
+            'user_id' => auth()->user()->id,
+            'thread_id' => $request['thread_id']
+        ]);
+        return redirect()->back();
     }
 
     /**
@@ -81,5 +87,25 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         //
+    }
+
+    public function like(Comment $comment){
+        $uid = auth()->user()->id;
+        $tid = $comment->id;
+        $fav = CommentLike::where([
+            ['user_id', '=', $uid],
+            ['comment_id', '=', $tid]
+        ]);
+        if($fav->exists()){
+            $fav->delete();
+            $comment->decrement('likes');
+        }else{
+            CommentLike::create([
+                'user_id' => $uid,
+                'comment_id' => $tid
+            ]);
+            $comment->increment('likes');
+        }
+        return redirect()->back();
     }
 }

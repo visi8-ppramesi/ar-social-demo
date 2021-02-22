@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ThreadController;
 use Illuminate\Foundation\Application;
@@ -26,15 +27,24 @@ use Inertia\Inertia;
 //     ]);
 // });
 
-Route::get('/', [HomeController::class, 'show']);
+Route::get('/', [HomeController::class, 'show'])->name('home');
 
 Route::get('/dashboard', function(){
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum'])->post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');
+Route::get('/thread/{thread_id}', [ThreadController::class, 'show'])->name('thread.show');
 
-Route::middleware(['auth:sanctum'])->get('/like/{thread}', [ThreadController::class, 'like'])->name('like');
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');
+    Route::post('/comment/submit', [CommentController::class, 'store'])->name('comment.submit');
+    Route::get('/like/thread/{thread}', [ThreadController::class, 'like'])->name('like');
+    Route::get('/like/comment/{comment}', [CommentController::class, 'like'])->name('comment.like');
+});
+
+// Route::middleware(['auth:sanctum'])->post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');
+
+// Route::middleware(['auth:sanctum'])->get('/like/{thread}', [ThreadController::class, 'like'])->name('like');
 
 // Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //     return Inertia::render('Dashboard');

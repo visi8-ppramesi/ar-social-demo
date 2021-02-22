@@ -1,17 +1,6 @@
 <template>
     <v-card>
         <v-img v-if="thread.image" :src="thread.image"></v-img>
-        <!-- <v-img src="https://image.shutterstock.com/image-vector/example-red-square-grunge-stamp-260nw-327662909.jpg"></v-img> -->
-        <!-- <v-card-subtitle>
-            <v-avatar>
-                <img
-                    :src="thread.user.profile_photo_url"
-                />
-            </v-avatar>
-        </v-card-subtitle>
-        <v-card-text class="text--primary">
-            <div>{{thread.message}}</div>
-        </v-card-text> -->
         <v-container>
             <v-row>
                 <v-col cols="1">
@@ -31,13 +20,12 @@
                         </div>
                         <div class="mt-1">
                             <span>
-                                <inertia-link :href="route('like', thread.id)">
-                                    <v-icon
-                                        small
-                                    >
-                                        mdi-heart
-                                    </v-icon>
-                                </inertia-link>
+                                <v-icon
+                                    small
+                                    @click="likeSubmit"
+                                >
+                                    mdi-heart
+                                </v-icon>
                                 {{thread.likes}}
                             </span>
                             <span class="ml-3">
@@ -71,5 +59,18 @@ export default {
         }
     },
     props: ['thread'],
+    methods:{
+        likeSubmit(){
+            let data = {}
+            this.$inertia.get(
+                'like/' + this.thread.id,
+                data,
+                {
+                    only: ['threads'],
+                    preserveScroll: true
+                }
+            )
+        }
+    }
 }
 </script>

@@ -61,9 +61,16 @@ class ThreadController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show(Request $request)
     {
-        //
+        return Inertia::render('Post', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'tags' => Tag::all(),
+            'thread' => Thread::with(['user', 'comments.user'])
+                ->where('id', $request['thread_id'])
+                ->first(),
+        ]);
     }
 
     /**

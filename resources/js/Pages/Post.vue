@@ -1,60 +1,66 @@
 <template>
-    <div class="front-page">
-        <v-navigation-drawer
-            clipped
-            app
-            v-if="$vuetify.breakpoint.smAndDown"
-        >
-            <frontpage-navbar :tags="tags"/>
-        </v-navigation-drawer>
-        <v-main>
-            <v-container>
-                <v-row>
-                    <v-col cols="2" v-if="$vuetify.breakpoint.mdAndUp">
-                        <frontpage-navbar :tags="tags"/>
-                    </v-col>
-                    <v-col cols="7" md="7" xs="12">
-                        <v-container fluid>
-                            <v-row>
-                                <v-col>
-                                    put create new post here
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-col>
-                                    <div v-for="(thread, idx) in threads" v-bind:key="idx" class="mb-2">
-                                        <frontpage-item :thread="thread" />
-                                    </div>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </v-col>
-                    <v-col cols="3" v-if="$vuetify.breakpoint.mdAndUp">
+    <app-layout>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                    <!-- <welcome /> -->
+                    <div class="thread-page">
+                        <v-navigation-drawer
+                            clipped
+                            app
+                            v-if="$vuetify.breakpoint.smAndDown"
+                        >
+                            <frontpage-navbar :tags="tags"/>
+                        </v-navigation-drawer>
+                        <v-main>
+                            <three-column-layout>
+                                <template v-slot:column-one>
+                                    <frontpage-navbar :tags="tags"/>
+                                </template>
+                                <template v-slot:column-two>
+                                    <v-container fluid>
+                                        <v-row>
+                                            <v-col>
+                                                <div class="mb-2">
+                                                    <post-item :thread="thread" :showComments="true" />
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                </template>
+                                <template v-slot:column-three>
 
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-main>
-    </div>
+                                </template>
+                            </three-column-layout>
+                        </v-main>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-layout>
 </template>
 
 <script>
-import FrontpageItem from './Components/Frontpage/FrontpageItem.vue'
+import AppLayout from '@/Layouts/AppLayout'
+import PostItem from './Components/Post/PostItem.vue'
 import FrontpageNavbar from './Components/Frontpage/FrontpageNavbar'
+import ThreeColumnLayout from './Components/Shared/ThreeColumnLayout'
 
 export default {
-    name: 'front-page',
+    name: 'post',
     components:{
+        AppLayout,
         FrontpageNavbar,
-        FrontpageItem
+        PostItem,
+        ThreeColumnLayout
     },
     data: () => ({
         drawer: false,
         group: null
     }),
     props: [
+        'thread',
         'tags',
-        'threads',
     ],
     watch: {
       group () {
