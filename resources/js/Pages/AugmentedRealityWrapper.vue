@@ -1,10 +1,12 @@
 <template>
     <div>
-        testing
+        <canvas id="arcanvas"></canvas>
     </div>
 </template>
 
 <script>
+import cubeSceneModule from '../Scenes/CubeSceneModule.js'
+
 export default {
     name:"augmented-reality-wrapper",
     created(){
@@ -23,7 +25,7 @@ export default {
     },
     methods:{
         initXR(){
-            console.log('testing')
+            cubeSceneModule()
         }
     }
 }
