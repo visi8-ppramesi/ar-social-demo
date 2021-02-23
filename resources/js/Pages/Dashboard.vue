@@ -14,6 +14,7 @@
                         :tags="tags"
                         :threads="threads"
                         :tab="tab"
+                        :banners="banners"
                     />
                 </div>
             </div>
@@ -38,6 +39,7 @@
             pinned: Array,
             tags: Array,
             tab: String,
+            banners: Array
         },
         components: {
             AppLayout,

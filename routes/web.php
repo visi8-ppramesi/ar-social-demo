@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ThreadController;
@@ -35,11 +36,21 @@ Route::get('/dashboard', function(){
 
 Route::get('/thread/{thread_id}', [ThreadController::class, 'show'])->name('thread.show');
 
+Route::get('/banner/redirect/{banner_id}', [BannerController::class, 'redirect'])->name('banner.redirect');
+
+Route::inertia('/ar', 'AugmentedRealityWrapper');
+
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');
     Route::post('/comment/submit', [CommentController::class, 'store'])->name('comment.submit');
+
     Route::get('/like/thread/{thread}', [ThreadController::class, 'like'])->name('like');
     Route::get('/like/comment/{comment}', [CommentController::class, 'like'])->name('comment.like');
+
+    Route::post('/banner/submit', [BannerController::class, 'store'])->name('banner.submit');
+    Route::get('/banner', function(){
+        return Inertia::render('UploadBanner');
+    });
 });
 
 // Route::middleware(['auth:sanctum'])->post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');

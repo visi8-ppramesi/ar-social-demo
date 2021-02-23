@@ -7,4 +7,8 @@ module.exports = {
             '@': path.resolve('resources/js'),
         },
     },
+    externals: {
+        "8thwall": "XR8",
+        "xr-extras": "XRExtras"
+    }
 };

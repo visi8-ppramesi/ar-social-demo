@@ -15,7 +15,7 @@
                 <template v-slot:column-two>
                     <v-container fluid>
                         <v-row class="mb-0">
-                            <v-col class="pb-0">
+                            <v-col class="pb-0 pt-0">
                                 <v-tabs v-model="tabSelector">
                                     <v-tab @click="showLatest" key="1">
                                         Latest
@@ -74,7 +74,13 @@
                     </v-container>
                 </template>
                 <template v-slot:column-three>
-
+                    <v-container class="pl-0">
+                        <v-row v-for="(banner, idx) in banners" class="pb-4" :key="idx">
+                            <v-col cols="12" class="pa-0">
+                                <banner :banner="banner"></banner>
+                            </v-col>
+                        </v-row>
+                    </v-container>
                 </template>
             </three-column-layout>
         </v-main>
@@ -85,6 +91,7 @@
 import PostItem from './Components/Post/PostItem'
 import ThreeColumnLayout from './Components/Shared/ThreeColumnLayout'
 import FrontpageNavbar from './Components/Frontpage/FrontpageNavbar'
+import Banner from './Components/Banner/Banner'
 
 export default {
     name: 'front-page',
@@ -107,7 +114,8 @@ export default {
     components:{
         FrontpageNavbar,
         PostItem,
-        ThreeColumnLayout
+        ThreeColumnLayout,
+        Banner
     },
     data: () => ({
         drawer: false,
@@ -121,7 +129,8 @@ export default {
     props: [
         'tags',
         'threads',
-        'tab'
+        'tab',
+        'banners'
     ],
     watch: {
       group () {

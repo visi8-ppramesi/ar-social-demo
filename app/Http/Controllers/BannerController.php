@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Banner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class BannerController extends Controller
 {
@@ -35,7 +37,18 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $img = $request->file('image_url');
+        $createObj = [
+            'message' => $request['message'],
+            'title' => $request['title'],
+            'link_url' => $request['link_url']
+        ];
+        if($img){
+            $imgPath = $img->store('public/images');
+            $createObj['image_url'] = Storage::url($imgPath);
+        }
+        Banner::create($createObj);
+        return redirect()->back();
     }
 
     /**
@@ -81,5 +94,10 @@ class BannerController extends Controller
     public function destroy(Banner $banner)
     {
         //
+    }
+
+    public function redirect(Request $request){
+        $link = Banner::find($request->banner_id)->link_url;
+        return Inertia::location($link);
     }
 }

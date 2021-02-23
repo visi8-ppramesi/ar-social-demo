@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Thread;
 use App\Models\Tag;
+use App\Models\Banner;
 
 class HomeController extends Controller
 {
@@ -47,13 +48,16 @@ class HomeController extends Controller
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
             'threads' => $thread->get(),
+            'banners' => Banner::orderBy('created_at', 'desc')
+                ->limit(3)
+                ->get(),
             'pinned' => Thread::with(['user', 'comments.user'])
                 ->orderBy('created_at', 'desc')
                 ->where('pinned', 1)
                 ->where('sidebar', 0)
                 ->where('group_id', 1)
                 ->first(),
-            'sidebad' => Thread::with(['user', 'comments.user'])
+            'sidebar' => Thread::with(['user', 'comments.user'])
                 ->orderBy('created_at', 'desc')
                 ->where('pinned', 0)
                 ->where('sidebar', 1)

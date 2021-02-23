@@ -8,11 +8,13 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"> --}}
-        {{-- <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"> --}}
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        {{-- <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script> --}}
+        {{-- <script async src="//apps.8thwall.com/xrweb?appKey=rY5shhe5g6lIJNfYicTE0eZnL9a2murci0EDzXeCbWtcqBZMsu9FIskpiLi1g5O6xFfz2y"></script> --}}
 
         <!-- Scripts -->
         @routes

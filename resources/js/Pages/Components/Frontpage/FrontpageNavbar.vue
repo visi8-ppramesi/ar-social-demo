@@ -4,8 +4,8 @@
     >
         <v-subheader>Tags</v-subheader>
         <v-list-item v-for="(tag, idx) in tags" v-bind:key="idx">
-            <inertia-link :href="route('dashboard', {tag_id: tag.id})" class="ml-4 text-sm text-gray-700 underline">
-                {{tag.name}}
+            <inertia-link :href="route('dashboard', {tag_id: tag.id})" class="text-sm text-gray-700">
+                <v-btn text>{{tag.name}}</v-btn>
             </inertia-link>
         </v-list-item>
     </v-list>
