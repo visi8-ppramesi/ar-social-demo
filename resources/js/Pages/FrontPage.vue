@@ -142,7 +142,7 @@ export default {
             if(this.isMobile()){
                 console.log('asdfasdf')
             }else{
-                console.log('qwerqwerqwer')
+
             }
         },
         showLatest(){
