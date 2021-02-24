@@ -15,7 +15,7 @@ const scenePipelineModule = () => {
         }
     }
 
-    const initXrScene = ({scene, camera, render}) => {
+    const initXrScene = ({scene, camera, renderer}) => {
         currentObj.setupScene({scene, camera, renderer, myCanvas})
     }
 

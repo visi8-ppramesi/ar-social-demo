@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <canvas id="arcanvas"></canvas>
+    <div id="ar-container">
+        <!-- <canvas id="arcanvas"></canvas> -->
+        <v-icon @click="takeScreenshot" id="camera-icon">mdi-camera</v-icon>
     </div>
 </template>
 
@@ -9,7 +10,10 @@ import scenePipelineModule from '../Scenes/ScenePipelineModule.js'
 
 export default {
     name:"augmented-reality-wrapper",
-    created(){
+    mounted(){
+        var canvas = document.createElement('canvas')
+        canvas.id = "arcanvas"
+        document.getElementById('ar-container').prepend(canvas)
         var xrExtraScriptTag = document.createElement('script')
         xrExtraScriptTag.src = "//cdn.8thwall.com/web/xrextras/xrextras.js"
         xrExtraScriptTag.id = "xrextras-script"
@@ -24,6 +28,22 @@ export default {
         }
     },
     methods:{
+        generateRandomString(length){
+            var result           = '';
+            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        },
+        takeScreenshot(){
+            let canvas = document.getElementById('arcanvas')
+            let strId = this.generateRandomString(6)
+            localStorage.setItem(strId, canvas.toDataURL('image/jpeg'))
+            canvas.parentNode.removeChild(canvas);
+            this.$inertia.get('/', {imguri: strId})
+        },
         onxrloaded(){
             XR8.addCameraPipelineModules([  // Add camera pipeline modules.
                 // Existing pipeline modules.
@@ -45,3 +65,17 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+#camera-icon{
+    position:absolute;
+    z-index:2;
+    left: 50%;
+    top:75%;
+    -webkit-transform: translate(-50%, -75%);
+    transform: translate(-50%, -75%);
+}
+#arcanvas{
+    z-index:1;
+}
+</style>

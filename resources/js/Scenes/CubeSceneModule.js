@@ -34,7 +34,8 @@ const cubeSceneModule = () => {
         event.preventDefault()
     }
 
-    const setupScene = ({scene, camera, renderer}) => {
+    const setupScene = ({scene, camera, renderer, myCanvas}) => {
+        canvas = myCanvas
         renderer.shadowMap.enabled = true
         renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
@@ -73,7 +74,6 @@ const cubeSceneModule = () => {
         surface.position.set(0, 0, 0)
         surface.receiveShadow = true
         scene.add(surface)
-        setupModels()
         camera.position.set(0, 3, 0)
     }
 
