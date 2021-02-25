@@ -1,4 +1,5 @@
 require('./bootstrap');
+require('./indexedDB');
 
 // Import modules...
 import '@mdi/font/css/materialdesignicons.css'

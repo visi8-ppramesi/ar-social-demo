@@ -48,6 +48,11 @@ import ThreeColumnLayout from './Components/Shared/ThreeColumnLayout'
 
 export default {
     name: 'post',
+    created(){
+        window.onload = function(){
+            console.log('onload')
+        }
+    },
     components:{
         AppLayout,
         FrontpageNavbar,

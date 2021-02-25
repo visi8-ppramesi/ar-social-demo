@@ -1,12 +1,12 @@
 <template>
     <div class="front-page">
-        <v-navigation-drawer
+        <!-- <v-navigation-drawer
             clipped
             app
             v-if="$vuetify.breakpoint.smAndDown"
         >
             <frontpage-navbar :tags="tags"/>
-        </v-navigation-drawer>
+        </v-navigation-drawer> -->
         <v-main>
             <three-column-layout>
                 <template v-slot:column-one>
@@ -16,7 +16,7 @@
                     <v-container fluid>
                         <v-row class="mb-0">
                             <v-col class="pb-0 pt-0">
-                                <v-tabs v-model="tabSelector">
+                                <v-tabs v-model="tabSelector" :show-arrows="false" id="tab-tabs">
                                     <v-tab @click="showLatest" key="1">
                                         Latest
                                     </v-tab>
@@ -172,9 +172,10 @@ export default {
         },
         augmentedRealityLink(){
             if(this.isMobile()){
-                console.log('asdfasdf')
+                var data = {}
+                this.$inertia.get('/ar', data, {preserveState: false})
             }else{
-
+                alert("To view AR content, please use a smartphone")
             }
         },
         showLatest(){
@@ -254,5 +255,8 @@ export default {
 .new-post-actions{
     display:flex;
     justify-content: space-between;
+}
+#tab-tabs >>> .v-slide-group__prev{
+    display:none;
 }
 </style>

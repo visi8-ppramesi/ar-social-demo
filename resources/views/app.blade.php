@@ -14,8 +14,8 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        {{-- <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script> --}}
-        {{-- <script async src="//apps.8thwall.com/xrweb?appKey=rY5shhe5g6lIJNfYicTE0eZnL9a2murci0EDzXeCbWtcqBZMsu9FIskpiLi1g5O6xFfz2y"></script> --}}
+        <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script>
+        <script async src="//apps.8thwall.com/xrweb?appKey=g9A9qvEGISS1wWvaR2EkJLvtqzmMROhXmG3zXuXvkcWD5jhv2Uy7m0iHYUZjfmsIOsCLXP"></script>
 
         <!-- Scripts -->
         @routes

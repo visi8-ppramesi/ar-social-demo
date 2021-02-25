@@ -1,33 +1,74 @@
 <template>
     <div id="ar-container">
-        <!-- <canvas id="arcanvas"></canvas> -->
-        <v-icon @click="takeScreenshot" id="camera-icon">mdi-camera</v-icon>
+        <canvas id="arcanvas" v-if="shownar"></canvas>
+        <v-icon
+            @click="closeAR"
+            id="close-icon"
+            color="white"
+            large
+        >
+            mdi-close-circle
+        </v-icon>
+        <div id="icons-container">
+            <v-icon
+                @click="takeScreenshot"
+                id="camera-icon"
+                color="white"
+                large
+            >
+                mdi-camera
+            </v-icon>
+            <v-icon
+                @click="takeVideo"
+                id="video-icon"
+                color="white"
+                large
+            >
+                mdi-video
+            </v-icon>
+        </div>
     </div>
 </template>
 
 <script>
 import scenePipelineModule from '../Scenes/ScenePipelineModule.js'
+import store, {increment, decrement} from '../Helpers/Count.js'
 
 export default {
     name:"augmented-reality-wrapper",
-    mounted(){
-        var canvas = document.createElement('canvas')
-        canvas.id = "arcanvas"
-        document.getElementById('ar-container').prepend(canvas)
-        var xrExtraScriptTag = document.createElement('script')
-        xrExtraScriptTag.src = "//cdn.8thwall.com/web/xrextras/xrextras.js"
-        xrExtraScriptTag.id = "xrextras-script"
-        document.getElementsByTagName('head')[0].appendChild(xrExtraScriptTag)
-        var xr8ScriptTag = document.createElement('script')
-        xr8ScriptTag.src = "//apps.8thwall.com/xrweb?appKey=g9A9qvEGISS1wWvaR2EkJLvtqzmMROhXmG3zXuXvkcWD5jhv2Uy7m0iHYUZjfmsIOsCLXP"
-        xr8ScriptTag.id = "xr8-script"
-        xr8ScriptTag.setAttribute('async', '')
-        document.getElementsByTagName('head')[0].appendChild(xr8ScriptTag)
-        window.onload = () => {
-            this.onxrloaded()
+    data(){
+        return {
+            shownar:false,
+            onLoadCalled: false,
+            mediaRecorder: null,
+            chunks: []
         }
     },
+    mounted(){
+        try{
+            this.onxrloaded()
+        }catch(error){
+            if(error.message === "XR8 is not defined"){
+                console.log('xr8 shit')
+            }else{
+                console.log('other shit')
+            }
+        }
+    },
+    created(){
+        window.onload = () => {
+            this.onxrloaded()
+            this.onLoadCalled = true
+        }
+        this.shownar = true
+    },
     methods:{
+        closeAR(){
+            this.shownar = false
+            XR8.stop()
+            this.$inertia.get('/')
+
+        },
         generateRandomString(length){
             var result           = '';
             var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -37,28 +78,52 @@ export default {
             }
             return result;
         },
+        takeVideo(){
+            var self = this
+            let canvas = document.getElementById('arcanvas')
+            var videoStream = canvas.captureStream(30)
+            this.mediaRecorder = new MediaRecorder(videoStream)
+            this.mediaRecorder.onstop = function(e){
+                var blob = new Blob(self.chunks, {type: 'video/mp4'})
+                this.chunks = []
+                localStorage.setItem(strId, URL.createObjectURL(blob))
+                let strId = self.generateRandomString(6)
+                this.shownar = false
+                XR8.stop()
+                this.$inertia.get('/', {imguri: strId})
+            }
+            this.mediaRecorder.ondataavailable = function(e){
+                this.chunks.push(e.data)
+            }
+        },
         takeScreenshot(){
+            console.log('take screenshot')
             let canvas = document.getElementById('arcanvas')
             let strId = this.generateRandomString(6)
             localStorage.setItem(strId, canvas.toDataURL('image/jpeg'))
-            canvas.parentNode.removeChild(canvas);
+            // canvas.parentNode.removeChild(canvas);
+            this.shownar = false
+            XR8.stop()
             this.$inertia.get('/', {imguri: strId})
         },
         onxrloaded(){
-            XR8.addCameraPipelineModules([  // Add camera pipeline modules.
-                // Existing pipeline modules.
-                XR8.GlTextureRenderer.pipelineModule(),      // Draws the camera feed.
-                XR8.Threejs.pipelineModule(),                // Creates a ThreeJS AR Scene.
-                XR8.XrController.pipelineModule(),           // Enables SLAM tracking.
-                XRExtras.AlmostThere.pipelineModule(),       // Detects unsupported browsers and gives hints.
-                XRExtras.FullWindowCanvas.pipelineModule(),  // Modifies the canvas to fill the window.
-                XRExtras.Loading.pipelineModule(),           // Manages the loading screen on startup.
-                XRExtras.RuntimeError.pipelineModule(),      // Shows an error image on runtime error.
-                // XRExtras.PwaInstaller.pipelineModule(),      // PWA installer ???
-                scenePipelineModule(),
-                // uiComponents(),
-            ])
-
+            console.log('onxrloaded')
+            if(store.counter < 1){
+                XR8.addCameraPipelineModules([  // Add camera pipeline modules.
+                    // Existing pipeline modules.
+                    XR8.GlTextureRenderer.pipelineModule(),      // Draws the camera feed.
+                    XR8.Threejs.pipelineModule(),                // Creates a ThreeJS AR Scene.
+                    XR8.XrController.pipelineModule(),           // Enables SLAM tracking.
+                    XRExtras.AlmostThere.pipelineModule(),       // Detects unsupported browsers and gives hints.
+                    XRExtras.FullWindowCanvas.pipelineModule(),  // Modifies the canvas to fill the window.
+                    XRExtras.Loading.pipelineModule(),           // Manages the loading screen on startup.
+                    XRExtras.RuntimeError.pipelineModule(),      // Shows an error image on runtime error.
+                    // XRExtras.PwaInstaller.pipelineModule(),      // PWA installer ???
+                    scenePipelineModule(),
+                    // uiComponents(),
+                ])
+            }
+            increment()
             // Open the camera and start running the camera run loop.
             XR8.run({canvas: document.getElementById('arcanvas')})
         }
@@ -67,13 +132,24 @@ export default {
 </script>
 
 <style scoped>
-#camera-icon{
+#icons-container{
     position:absolute;
     z-index:2;
     left: 50%;
     top:75%;
     -webkit-transform: translate(-50%, -75%);
     transform: translate(-50%, -75%);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+#close-icon{
+    position: absolute;
+    z-index: 3;
+    left:10%;
+    top:5%;
+    -webkit-transform: translate(-10%, -5%);
+    transform: translate(-10%, -5%);
 }
 #arcanvas{
     z-index:1;
