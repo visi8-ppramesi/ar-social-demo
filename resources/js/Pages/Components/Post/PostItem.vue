@@ -2,6 +2,7 @@
     <div>
         <v-card>
             <v-img v-if="thread.image" :src="thread.image"></v-img>
+            <video v-if="thread.video" :src="thread.video" controls type="video/webm" style="width:100%"></video>
             <v-container>
                 <v-row>
                     <v-col cols="3" md="1">

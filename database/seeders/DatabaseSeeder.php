@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             'description'=>'public group'
         ]);
 
+        \App\Models\Tag::create(['name' => 'Tag 1']);
+        \App\Models\Tag::create(['name' => 'Tag 2']);
+        \App\Models\Tag::create(['name' => 'Tag 3']);
+        \App\Models\Tag::create(['name' => 'Tag 4']);
 
         \App\Models\User::create([
             'email' => 'ppramesi@visi8.com',

@@ -42,6 +42,7 @@ class ThreadController extends Controller
     public function store(Request $request)
     {
         $img = $request->file('image');
+        $vid = $request->file('video');
         $createObj = [
             'message' => $request['post'],
             'user_id' => auth()->user()->id,
@@ -51,8 +52,12 @@ class ThreadController extends Controller
             $imgPath = $img->store('public/images');
             $createObj['image'] = Storage::url($imgPath);
         }
+        if($vid){
+            $vidPath = $vid->store('public/videos');
+            $createObj['video'] = Storage::url($vidPath);
+        }
         Thread::create($createObj);
-        return redirect()->back();
+        return redirect('/');
     }
 
     /**

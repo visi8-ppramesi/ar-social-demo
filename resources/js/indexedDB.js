@@ -8,4 +8,10 @@ if (!window.indexedDB) {
     window.alert("Your browser doesn't support a stable version of IndexedDB.")
  }
 
- window.request = window.indexedDB.open("db")
+window.request = window.indexedDB.open("db")
+window.request.onupgradeneeded = (event) => {
+    let db = event.target.result
+    let store = db.createObjectStore('videos', {
+        autoIncrement: true
+    })
+}

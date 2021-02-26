@@ -11,20 +11,31 @@
         </v-icon>
         <div id="icons-container">
             <v-icon
-                @click="takeScreenshot"
+                @click="stopRecording"
+                v-if="currentlyRecording"
                 id="camera-icon"
-                color="white"
+                color="red"
                 large
             >
-                mdi-camera
+                mdi-stop-circle-outline
             </v-icon>
             <v-icon
-                @click="takeVideo"
-                id="video-icon"
-                color="white"
+                @click="takeScreenshot"
+                v-if="!currentlyRecording"
+                id="camera-icon"
+                color="red"
                 large
             >
-                mdi-video
+                mdi-camera-outline
+            </v-icon>
+            <v-icon
+                @click="startRecording"
+                v-if="!currentlyRecording"
+                id="video-icon"
+                color="red"
+                large
+            >
+                mdi-video-outline
             </v-icon>
         </div>
     </div>
@@ -41,7 +52,9 @@ export default {
             shownar:false,
             onLoadCalled: false,
             mediaRecorder: null,
-            chunks: []
+            chunks: [],
+            audioStream: null,
+            currentlyRecording: false
         }
     },
     mounted(){
@@ -78,23 +91,39 @@ export default {
             }
             return result;
         },
-        takeVideo(){
+        stopRecording(){
+            this.mediaRecorder.stop()
+        },
+        startRecording(){
             var self = this
             let canvas = document.getElementById('arcanvas')
             var videoStream = canvas.captureStream(30)
-            this.mediaRecorder = new MediaRecorder(videoStream)
-            this.mediaRecorder.onstop = function(e){
-                var blob = new Blob(self.chunks, {type: 'video/mp4'})
-                this.chunks = []
-                localStorage.setItem(strId, URL.createObjectURL(blob))
-                let strId = self.generateRandomString(6)
-                this.shownar = false
-                XR8.stop()
-                this.$inertia.get('/', {imguri: strId})
-            }
-            this.mediaRecorder.ondataavailable = function(e){
-                this.chunks.push(e.data)
-            }
+            var device = navigator.mediaDevices.getUserMedia({audio: true})
+            this.currentlyRecording = true
+            device.then((stream) => {
+                videoStream.addTrack(stream.getTracks()[0])
+                self.mediaRecorder = new MediaRecorder(videoStream)
+                self.mediaRecorder.onstop = function(e){
+                    var blob = new Blob(self.chunks, {type: 'video/mp4'})
+                    self.chunks = []
+                    // let strId = self.generateRandomString(6)
+                    // localStorage.setItem(strId, URL.createObjectURL(blob))
+                    self.shownar = false
+                    var reader = new FileReader()
+                    reader.onload = function(event){
+                        let strId = self.generateRandomString(6)
+                        localStorage.setItem(strId, event.target.result)
+                        self.$inertia.get('/', {viduri: strId})
+                    }
+                    reader.readAsDataURL(blob)
+                    XR8.stop()
+                    // self.$inertia.get('/', {viduri: strId})
+                }
+                self.mediaRecorder.ondataavailable = function(e){
+                    self.chunks.push(e.data)
+                }
+                self.mediaRecorder.start();
+            })
         },
         takeScreenshot(){
             console.log('take screenshot')

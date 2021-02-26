@@ -36,6 +36,7 @@
                             <v-col>
                                 <v-card class="px-2 pb-2">
                                     <v-img :src="previewUrl"></v-img>
+                                    <video :src="vidurl" v-if="vidupload" autoplay controls style="width:100%"></video>
                                     <v-form
                                         v-model="form"
                                     >
@@ -45,6 +46,15 @@
                                             label="What's happening?"
                                             v-model="post"
                                         ></v-textarea>
+                                        <v-combobox
+                                            v-model="selectTags"
+                                            item-text="name"
+                                            item-value="id"
+                                            :items="tags"
+                                            label="Tags"
+                                            multiple
+                                            chips
+                                        ></v-combobox>
                                         <v-file-input type="file" ref="file" style="display: none" v-model="image" @change="previewImage"/>
                                     </v-form>
                                     <v-spacer></v-spacer>
@@ -95,14 +105,26 @@ import Banner from './Components/Banner/Banner'
 
 export default {
     name: 'front-page',
+    // computed:{
+    //     getTags(){
+    //         return this.tags.map(t => t.name)
+    //     }
+    // },
     created(){
         let url = new URL(window.location.href)
         let sPar = new URLSearchParams(url.search)
+
         if(sPar.has('imguri')){
             this.arimg = localStorage.getItem(sPar.get('imguri'))
             this.previewUrl = this.arimg
-            this.armode = true
+            this.armode = 1
             localStorage.removeItem(sPar.get('imguri'))
+        }
+        if(sPar.has('viduri')){
+            this.vidupload = true
+            this.vidurl = localStorage.getItem(sPar.get('viduri'))
+            this.armode = 2
+            localStorage.removeItem(sPar.get('viduri'))
         }
 
         switch(this.tab){
@@ -127,6 +149,7 @@ export default {
         Banner
     },
     data: () => ({
+        selectTags: [],
         drawer: false,
         group: null,
         form: null,
@@ -134,8 +157,12 @@ export default {
         previewUrl:'',
         post:'',
         tabSelector: 0,
-        armode: false,
-        arimg: ''
+        armode: 0,
+        arimg: '',
+        db: null,
+        ready: false,
+        cats: [],
+        vidupload: false
     }),
     props: [
         'tags',
@@ -228,16 +255,47 @@ export default {
         submit(){
             var data = new FormData()
             data.append('post', this.post)
+            switch(this.armode){
+                case 0:
+                    this.$inertia.post(
+                        '/thread/submit',
+                        data,
+                        { preserveState: false }
+                    )
+                    break;
+                case 1:
+                    data.append('image', this.dataURItoBlob(this.arimg))
+                    this.$inertia.post(
+                        '/thread/submit',
+                        data,
+                        { preserveState: false }
+                    )
+                    break;
+                case 2:
+                    data.append('video', this.dataURItoBlob(this.vidurl))
+                    this.$inertia.post(
+                        '/thread/submit',
+                        data,
+                        { preserveState: false }
+                    )
+                    break;
+                    // await fetch(this.vidurl)
+                    //     .then((result) => {
+                    //         data.append('video', result.blob())
+                    //         this.$inertia.post(
+                    //             '/thread/submit',
+                    //             data,
+                    //             { preserveState: false }
+                    //         )
+                    //     })
+                    //     break;
+
+            }
             if(this.armode){
                 data.append('image', this.dataURItoBlob(this.arimg))
             }else{
                 data.append('image', this.image)
             }
-            this.$inertia.post(
-                '/thread/submit',
-                data,
-                { preserveState: false }
-            )
         },
         isMobile(){
             var check = false;
