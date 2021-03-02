@@ -43,6 +43,12 @@ class HomeController extends Controller
                 $thread->orderBy('created_at', 'desc');
                 break;
         }
+        if($request->query('tag_id')){
+            $tagid = $request->query('tag_id');
+            $thread->whereHas('tags', function($q) use ($tagid){
+                $q->where('tag_id', $tagid);
+            });
+        }
         return Inertia::render('Dashboard', [
             'tab' => $request->query('tab'),
             'canLogin' => Route::has('login'),

@@ -159,9 +159,9 @@ export default {
                 '/like/comment/' + commentId,
                 data,
                 {
-                    only: ['threads', 'thread'],
+                    only: ['threads', 'thread', 'items'],
                     preserveScroll: true,
-                    preserveState: true
+                    // preserveState: true
                 }
             )
         },
@@ -171,9 +171,9 @@ export default {
                 '/like/thread/' + this.thread.id,
                 data,
                 {
-                    only: ['threads', 'thread'],
+                    only: ['threads', 'thread', 'items'],
                     preserveScroll: true,
-                    preserveState: true
+                    // preserveState: true
                 }
             )
         }

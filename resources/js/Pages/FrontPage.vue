@@ -53,7 +53,9 @@
                                             :items="tags"
                                             label="Tags"
                                             multiple
-                                            chips
+                                            small-chips
+                                            dense
+                                            class="combobox"
                                         ></v-combobox>
                                         <v-file-input type="file" ref="file" style="display: none" v-model="image" @change="previewImage"/>
                                     </v-form>
@@ -76,8 +78,12 @@
                         </v-row>
                         <v-row>
                             <v-col>
-                                <div v-for="(thread, idx) in threads" v-bind:key="idx" class="mb-2">
+                                <!-- <div v-for="(thread, idx) in threads" v-bind:key="idx" class="mb-2">
                                     <post-item :thread="thread" />
+                                </div> -->
+                                <div v-for="(item, idx) in items" v-bind:key="idx" class="mb-2">
+                                    <post-item :thread="item" v-if="item.type === 'thread'" />
+                                    <banner :banner="item" v-if="item.type === 'banner' && $vuetify.breakpoint.smAndDown" />
                                 </div>
                             </v-col>
                         </v-row>
@@ -111,6 +117,17 @@ export default {
     //     }
     // },
     created(){
+        var self = this
+        this.items = _.map(this.threads, function(obj){
+            obj.type = "thread"
+            return obj
+        })
+
+        _.forEach(this.banners, function(obj, key){
+            obj.type = "banner"
+            self.items.splice(key * 5 ,0 ,obj)
+        })
+
         let url = new URL(window.location.href)
         let sPar = new URLSearchParams(url.search)
 
@@ -162,7 +179,8 @@ export default {
         db: null,
         ready: false,
         cats: [],
-        vidupload: false
+        vidupload: false,
+        items: []
     }),
     props: [
         'tags',
@@ -202,7 +220,7 @@ export default {
                 var data = {}
                 this.$inertia.get('/ar', data, {preserveState: false})
             }else{
-                alert("To view AR content, please use a smartphone")
+                alert("To view AR content, please open the app on a smartphone")
             }
         },
         showLatest(){
@@ -255,6 +273,12 @@ export default {
         submit(){
             var data = new FormData()
             data.append('post', this.post)
+
+            var k = this.selectTags.map(t => t.id)
+            if(k.length > 0){
+                data.append('tags', JSON.stringify(k))
+            }
+
             switch(this.armode){
                 case 0:
                     this.$inertia.post(
@@ -316,5 +340,8 @@ export default {
 }
 #tab-tabs >>> .v-slide-group__prev{
     display:none;
+}
+.combobox >>> .v-select__selections input{
+    background-color: transparent;
 }
 </style>

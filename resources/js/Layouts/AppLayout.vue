@@ -5,7 +5,7 @@
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto md:px-4 sm:px-0 lg:px-8">
                     <div class="flex justify-between h-16">
-                        <div class="flex">
+                        <div class="flex logo-container">
                             <!-- Logo -->
                             <div class="flex-shrink-0 flex items-center">
                                 <inertia-link :href="route('home')">
@@ -21,7 +21,7 @@
                             </div> -->
                         </div>
 
-                        <div class="sm:flex sm:items-center sm:ml-6">
+                        <div class="flex items-center justify-end profile-icon-container">
                             <!-- <div class="ml-3 relative">
                                 <jet-dropdown align="right" width="60" v-if="$page.props.jetstream.hasTeamFeatures">
                                     <template #trigger>
@@ -265,3 +265,14 @@
         }
     }
 </script>
+
+<style lang="css" scoped>
+@media (max-width: 600px) {
+    .profile-icon-container{
+        padding-right: 24px;
+    }
+    .logo-container{
+        padding-left: 24px;
+    }
+}
+</style>

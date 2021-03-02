@@ -14,6 +14,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <script src="//cdn.8thwall.com/web/aframe/8frame-0.8.2.min.js"></script>
         <script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script>
         <script async src="//apps.8thwall.com/xrweb?appKey=g9A9qvEGISS1wWvaR2EkJLvtqzmMROhXmG3zXuXvkcWD5jhv2Uy7m0iHYUZjfmsIOsCLXP"></script>
 

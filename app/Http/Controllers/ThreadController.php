@@ -56,7 +56,10 @@ class ThreadController extends Controller
             $vidPath = $vid->store('public/videos');
             $createObj['video'] = Storage::url($vidPath);
         }
-        Thread::create($createObj);
+        $thread = Thread::create($createObj);
+        if($request['tags']){
+            $thread->tags()->attach(json_decode($request['tags']));
+        }
         return redirect('/');
     }
 

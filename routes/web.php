@@ -40,6 +40,10 @@ Route::get('/banner/redirect/{banner_id}', [BannerController::class, 'redirect']
 
 Route::inertia('/ar', 'AugmentedRealityWrapper');
 
+Route::get('/test', function(){
+    return Inertia::render('Test');
+});
+
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/thread/submit', [ThreadController::class, 'store'])->name('thread.submit');
     Route::post('/comment/submit', [CommentController::class, 'store'])->name('comment.submit');
